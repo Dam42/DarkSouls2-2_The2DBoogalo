@@ -8,7 +8,7 @@ namespace Absentia.Player
         [SerializeField] private int movementSpeed;
         private float fallingMultiplier;
         private float lowJumpMultiplier;
-
+        private PlayerStatus status;
         private Rigidbody2D playerRB;
         private Vector2 newVelocityVector = new Vector2(0, 0);
         private Vector2 newJumpingVector = new Vector2(0, 0);
@@ -20,6 +20,7 @@ namespace Absentia.Player
             // Get all the needed components
             playerRB = GetComponent<Rigidbody2D>();
             input = GetComponent<PlayerInput>();
+            status = GetComponent<PlayerStatus>();
 
             //Set gravity multipliers for falling and for low jump
             fallingMultiplier = Physics2D.gravity.y * (2 - 1);
@@ -35,7 +36,7 @@ namespace Absentia.Player
         private void HandleInput()
         {
             if (input.HorizontalInput != 0) PlayerMove();
-            if (input.Jump) PlayerJump();
+            if (input.Jump && status.isGrounded) PlayerJump();
         }
 
         private void PlayerMove()
@@ -45,6 +46,7 @@ namespace Absentia.Player
             playerRB.velocity = newVelocityVector;
         }
 
+        #region ----- Jumping ----- 
         private void PlayerJump()
         {
             newJumpingVector.x = playerRB.velocity.x;
@@ -63,5 +65,6 @@ namespace Absentia.Player
                 playerRB.velocity += Vector2.up * lowJumpMultiplier * Time.deltaTime;
             }
         }
+        #endregion
     }
 }

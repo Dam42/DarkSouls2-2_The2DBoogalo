@@ -7,6 +7,7 @@ namespace Absentia.Player
         private Animator anim;
         private Rigidbody2D player;
         private SpriteRenderer sprite;
+        private PlayerStatus status;
         private PlayerInput input;
 
         private void Awake()
@@ -16,6 +17,7 @@ namespace Absentia.Player
             player = GetComponent<Rigidbody2D>();
             sprite = GetComponent<SpriteRenderer>();
             input = GetComponent<PlayerInput>();
+            status = GetComponent<PlayerStatus>();
         }
 
         private void Update()
@@ -31,7 +33,8 @@ namespace Absentia.Player
 
         private int GetState()
         {
-            if (player.velocity.x != 0 && player.velocity.y == 0) return Run_Gun;
+            //if (player.velocity.x != 0 && player.velocity.y == 0) return Run_Gun;
+            if (status.isGrounded && input.HorizontalInput != 0) return Run_Gun;
             if (player.velocity.y > 0) return Jump_Gun;
             if (player.velocity.y < 0) return Fall_Gun;       
             return Idle;
