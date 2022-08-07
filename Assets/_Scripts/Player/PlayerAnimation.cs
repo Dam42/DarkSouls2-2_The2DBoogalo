@@ -5,7 +5,6 @@ namespace Absentia.Player
     public class PlayerAnimation : MonoBehaviour
     {
         private Animator anim;
-        private Rigidbody2D player;
         private SpriteRenderer sprite;
         private PlayerStatus status;
         private PlayerInput input;
@@ -14,7 +13,6 @@ namespace Absentia.Player
         {
             // Get all the components
             anim = GetComponent<Animator>();
-            player = GetComponent<Rigidbody2D>();
             sprite = GetComponent<SpriteRenderer>();
             input = GetComponent<PlayerInput>();
             status = GetComponent<PlayerStatus>();
@@ -35,8 +33,8 @@ namespace Absentia.Player
         {
             //if (player.velocity.x != 0 && player.velocity.y == 0) return Run_Gun;
             if (status.isGrounded && input.HorizontalInput != 0) return Run_Gun;
-            if (player.velocity.y > 0) return Jump_Gun;
-            if (player.velocity.y < 0) return Fall_Gun;       
+            if (status.isJumping) return Jump_Gun;
+            if (status.isFalling) return Fall_Gun;       
             return Idle;
         }
 

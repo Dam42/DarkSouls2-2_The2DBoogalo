@@ -529,10 +529,10 @@ GameObject:
   - component: {fileID: 545732755}
   - component: {fileID: 545732754}
   - component: {fileID: 545732757}
-  - component: {fileID: 545732759}
   - component: {fileID: 545732756}
-  - component: {fileID: 545732758}
   - component: {fileID: 545732760}
+  - component: {fileID: 545732759}
+  - component: {fileID: 545732758}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -725,6 +725,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isGrounded: 0
+  isJumping: 0
+  isFalling: 0
   groundLayer:
     serializedVersion: 2
     m_Bits: 64

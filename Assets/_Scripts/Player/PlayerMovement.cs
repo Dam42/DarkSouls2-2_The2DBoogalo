@@ -5,14 +5,20 @@ namespace Absentia.Player
 {
     public class PlayerMovement : MonoBehaviour
     {
+        [Header("Movement Setting")]
         [SerializeField] private int movementSpeed;
+        private Vector2 newVelocityVector = new Vector2(0, 0);
+
+        [Header("Jump Setting")]
+        [SerializeField] private float JumpPower;
+        private Vector2 newJumpingVector = new Vector2(0, 0);
+        private bool hasDoubleJump;
         private float fallingMultiplier;
         private float lowJumpMultiplier;
-        private PlayerStatus status;
+
+        // Components
         private Rigidbody2D playerRB;
-        private Vector2 newVelocityVector = new Vector2(0, 0);
-        private Vector2 newJumpingVector = new Vector2(0, 0);
-        [SerializeField] private float JumpPower;
+        private PlayerStatus status;
         private PlayerInput input;
 
         private void Awake()
@@ -22,7 +28,7 @@ namespace Absentia.Player
             input = GetComponent<PlayerInput>();
             status = GetComponent<PlayerStatus>();
 
-            //Set gravity multipliers for falling and for low jump
+            // Set gravity multipliers for falling and for low jump
             fallingMultiplier = Physics2D.gravity.y * (2 - 1);
             lowJumpMultiplier = Physics2D.gravity.y * (10 - 1);
         }
@@ -31,12 +37,17 @@ namespace Absentia.Player
         {
             HandleInput();
             HandleLowJumpAndFasterFalling();
+            if (status.isGrounded) hasDoubleJump = true;
         }
 
         private void HandleInput()
         {
             if (input.HorizontalInput != 0) PlayerMove();
-            if (input.Jump && status.isGrounded) PlayerJump();
+            if(input.Jump)
+            {
+                if (status.isGrounded) PlayerNormalJump();
+                else if (!status.isGrounded && hasDoubleJump) PlayerDoubleJump();
+            }
         }
 
         private void PlayerMove()
@@ -47,11 +58,18 @@ namespace Absentia.Player
         }
 
         #region ----- Jumping ----- 
-        private void PlayerJump()
+        private void PlayerNormalJump()
         {
             newJumpingVector.x = playerRB.velocity.x;
             newJumpingVector.y = JumpPower;
             playerRB.velocity = newJumpingVector;
+        }
+        private void PlayerDoubleJump()
+        {
+            newJumpingVector.x = playerRB.velocity.x;
+            newJumpingVector.y = JumpPower;
+            playerRB.velocity = newJumpingVector;
+            hasDoubleJump = false;
         }
 
         private void HandleLowJumpAndFasterFalling()
