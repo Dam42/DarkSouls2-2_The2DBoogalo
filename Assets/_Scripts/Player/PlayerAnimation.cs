@@ -20,21 +20,21 @@ namespace Absentia.Player
 
         private void Update()
         {
-            if (input.HorizontalInput != 0) sprite.flipX = input.HorizontalInput < 0;
+            if (input.HorizontalInput != 0 && !status.IsDashing) sprite.flipX = input.HorizontalInput < 0;
 
             var state = GetState();
 
             if (state == _currentState) return;
             anim.CrossFade(state, 0, 0);
-            _currentState = state;
+            _currentState = state; 
         }
 
         private int GetState()
         {
-            //if (player.velocity.x != 0 && player.velocity.y == 0) return Run_Gun;
-            if (status.isGrounded && input.HorizontalInput != 0) return Run_Gun;
-            if (status.isJumping) return Jump_Gun;
-            if (status.isFalling) return Fall_Gun;       
+            if (status.IsGrounded && input.HorizontalInput != 0 && !status.IsDashing) return Run_Gun;
+            if (status.IsJumping) return Jump_Gun;
+            if (status.IsFalling) return Fall_Gun;
+            if (status.IsDashing) return Dash_Gun;
             return Idle;
         }
 
@@ -46,7 +46,7 @@ namespace Absentia.Player
         private static readonly int Run_Gun = Animator.StringToHash("Run_Gun");
         private static readonly int Jump_Gun = Animator.StringToHash("Jump_Gun");
         private static readonly int Fall_Gun = Animator.StringToHash("Fall_Gun");
-
+        private static readonly int Dash_Gun = Animator.StringToHash("Dash_Gun");
         #endregion Cached Properties
     }
 }

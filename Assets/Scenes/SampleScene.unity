@@ -599,7 +599,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 545732751}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.089999914, y: -3.8, z: 0}
+  m_LocalPosition: {x: -0.01, y: -1.97, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -666,6 +666,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   movementSpeed: 5
   JumpPower: 7
+  dashPower: 9
+  dashCooldown: 0.6
 --- !u!95 &545732757
 Animator:
   serializedVersion: 3
@@ -710,8 +712,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   HorizontalInput: 0
-  Jump: 0
+  JumpInput: 0
   IsStillHoldingJump: 0
+  DashInput: 0
 --- !u!114 &545732760
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -724,9 +727,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 79c44aa4221810c4cbc6a9959a1e6b75, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isGrounded: 0
-  isJumping: 0
-  isFalling: 0
+  IsGrounded: 0
+  IsJumping: 0
+  IsFalling: 0
+  IsDashing: 0
+  CanMove: 0
   groundLayer:
     serializedVersion: 2
     m_Bits: 64

@@ -16,6 +16,11 @@ namespace Absentia.Player
         private float fallingMultiplier;
         private float lowJumpMultiplier;
 
+        [Header("Dash Setting")]
+        [SerializeField] private float dashPower;
+        [SerializeField] private float dashCooldown;
+        private float currentDashCooldown;
+
         // Components
         private Rigidbody2D playerRB;
         private PlayerStatus status;
@@ -37,17 +42,19 @@ namespace Absentia.Player
         {
             HandleInput();
             HandleLowJumpAndFasterFalling();
-            if (status.isGrounded) hasDoubleJump = true;
+            if (status.IsGrounded) hasDoubleJump = true;
+            currentDashCooldown += Time.deltaTime;
         }
 
         private void HandleInput()
         {
-            if (input.HorizontalInput != 0) PlayerMove();
-            if(input.Jump)
+            if (input.HorizontalInput != 0 && !status.IsDashing) PlayerMove();
+            if(input.JumpInput && !status.IsDashing)
             {
-                if (status.isGrounded) PlayerNormalJump();
-                else if (!status.isGrounded && hasDoubleJump) PlayerDoubleJump();
+                if (status.IsGrounded) PlayerNormalJump();
+                else if (!status.IsGrounded && hasDoubleJump) PlayerDoubleJump();
             }
+            if (input.DashInput && currentDashCooldown >= dashCooldown && input.HorizontalInput != 0) PlayerDash();
         }
 
         private void PlayerMove()
@@ -84,5 +91,20 @@ namespace Absentia.Player
             }
         }
         #endregion
+
+        private void PlayerDash()
+        {
+            currentDashCooldown = 0f;
+            status.IsDashing = true;
+            playerRB.constraints = RigidbodyConstraints2D.FreezePositionY | RigidbodyConstraints2D.FreezeRotation;
+            playerRB.velocity = new Vector2(dashPower * Mathf.Sign(input.HorizontalInput), 0);
+            Invoke("PlayerDashEnded", .3f);
+        }
+        private void PlayerDashEnded()
+        {
+            playerRB.constraints = RigidbodyConstraints2D.FreezeRotation;
+            status.IsDashing = false;
+            playerRB.velocity = new Vector2(0, 0);
+        }
     }
 }
