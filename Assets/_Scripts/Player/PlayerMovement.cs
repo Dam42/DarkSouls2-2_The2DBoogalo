@@ -42,8 +42,13 @@ namespace Absentia.Player
         {
             HandleInput();
             HandleLowJumpAndFasterFalling();
-            if (status.IsGrounded) hasDoubleJump = true;
             currentDashCooldown += Time.deltaTime;
+        }
+
+        private void FixedUpdate()
+        {
+            if (status.IsGrounded) hasDoubleJump = true;
+            if (status.IsGrounded && playerRB.velocity.x != 0 && input.HorizontalInput == 0 && !status.IsDashing) PreventPlayerFromSliding();
         }
 
         private void HandleInput()
@@ -62,6 +67,11 @@ namespace Absentia.Player
             newVelocityVector.x = input.HorizontalInput * movementSpeed;
             newVelocityVector.y = playerRB.velocity.y;
             playerRB.velocity = newVelocityVector;
+        }
+
+        private void PreventPlayerFromSliding()
+        {
+            playerRB.velocity = new Vector2(0, 0);
         }
 
         #region ----- Jumping ----- 
@@ -92,6 +102,7 @@ namespace Absentia.Player
         }
         #endregion
 
+        #region ----- Dashing -----
         private void PlayerDash()
         {
             currentDashCooldown = 0f;
@@ -106,5 +117,6 @@ namespace Absentia.Player
             status.IsDashing = false;
             playerRB.velocity = new Vector2(0, 0);
         }
+        #endregion
     }
 }

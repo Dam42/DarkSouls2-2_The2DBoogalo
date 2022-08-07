@@ -11,13 +11,11 @@ namespace Absentia.Player
         public bool CanMove;
 
         private Rigidbody2D player;
-        private PlayerMovement playerMovement;
 
         private void Awake()
         {
             boxCollider = GetComponent<BoxCollider2D>();
             player = GetComponent<Rigidbody2D>();
-            playerMovement = GetComponent<PlayerMovement>();
         }
 
         private void Update()
