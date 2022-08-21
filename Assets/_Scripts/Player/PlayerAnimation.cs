@@ -21,6 +21,8 @@ namespace Absentia.Player
         private void Update()
         {
             if (input.HorizontalInput != 0 && !status.IsDashing) sprite.flipX = input.HorizontalInput < 0;
+            status.IsLookingRight = !sprite.flipX;
+
 
             var state = GetState();
 
