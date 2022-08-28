@@ -12,8 +12,8 @@ namespace Absentia.Player
         private void Update()
         {
             HorizontalInput = Input.GetAxis("Horizontal");
-            JumpInput = Input.GetKeyDown(KeyCode.X);
-            IsStillHoldingJump = Input.GetKey(KeyCode.X);
+            JumpInput = Input.GetKeyDown(KeyCode.Z);
+            IsStillHoldingJump = Input.GetKey(KeyCode.Z);
             DashInput = Input.GetKeyDown(KeyCode.C);
         }
     }

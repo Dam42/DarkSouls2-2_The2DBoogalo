@@ -20,9 +20,11 @@ namespace Absentia.Player
 
         private void Update()
         {
-            if (input.HorizontalInput != 0 && !status.IsDashing) sprite.flipX = input.HorizontalInput < 0;
-            status.IsLookingRight = !sprite.flipX;
-
+            if (input.HorizontalInput != 0 && !status.IsDashing && status.CanMove)
+            {
+                sprite.flipX = status.IsWallSliding ? input.HorizontalInput > 0 : input.HorizontalInput < 0;
+            }
+            status.IsLookingRight = status.IsWallSliding ? sprite.flipX : !sprite.flipX;
 
             var state = GetState();
 
@@ -37,6 +39,10 @@ namespace Absentia.Player
             if (status.IsJumping) return Jump_Gun;
             if (status.IsFalling) return Fall_Gun;
             if (status.IsDashing) return Dash_Gun;
+            if (status.IsNearWall)
+            {
+                if (status.IsWallSliding) return WallSlide_Gun;
+            }    
             return Idle;
         }
 
@@ -49,6 +55,7 @@ namespace Absentia.Player
         private static readonly int Jump_Gun = Animator.StringToHash("Jump_Gun");
         private static readonly int Fall_Gun = Animator.StringToHash("Fall_Gun");
         private static readonly int Dash_Gun = Animator.StringToHash("Dash_Gun");
+        private static readonly int WallSlide_Gun = Animator.StringToHash("WallSlide_Gun");
         #endregion Cached Properties
     }
 }

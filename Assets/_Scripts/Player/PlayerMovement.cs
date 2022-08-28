@@ -1,4 +1,4 @@
-using System;
+using System.Collections;
 using UnityEngine;
 
 namespace Absentia.Player
@@ -7,10 +7,12 @@ namespace Absentia.Player
     {
         [Header("Movement Setting")]
         [SerializeField] private int movementSpeed;
+
         private Vector2 newVelocityVector = new Vector2(0, 0);
 
         [Header("Jump Setting")]
         [SerializeField] private float JumpPower;
+
         private Vector2 newJumpingVector = new Vector2(0, 0);
         private bool hasDoubleJump;
         private float fallingMultiplier;
@@ -18,11 +20,13 @@ namespace Absentia.Player
 
         [Header("Dash Setting")]
         [SerializeField] private float dashPower;
+
         [SerializeField] private float dashCooldown;
         private float currentDashCooldown;
 
         // Components
         private Rigidbody2D playerRB;
+
         private PlayerStatus status;
         private PlayerInput input;
 
@@ -42,7 +46,7 @@ namespace Absentia.Player
         {
             HandleInput();
             HandleLowJumpAndFasterFalling();
-            currentDashCooldown += Time.deltaTime;
+            HandleTimers();
         }
 
         private void FixedUpdate()
@@ -53,34 +57,65 @@ namespace Absentia.Player
 
         private void HandleInput()
         {
-            if (input.HorizontalInput != 0 && !status.IsDashing) PlayerMove();
-            if(input.JumpInput && !status.IsDashing)
+            if (input.HorizontalInput != 0 && !status.IsDashing && status.CanMove) PlayerMove();
+            if (input.JumpInput && !status.IsDashing)
             {
                 if (status.IsGrounded) PlayerNormalJump();
-                else if (!status.IsGrounded && hasDoubleJump) PlayerDoubleJump();
+                else if (!status.IsGrounded && !status.IsNearWall && hasDoubleJump) PlayerDoubleJump();
+                else if (status.IsWallSliding) WallJump();
             }
-            if (input.DashInput && currentDashCooldown >= dashCooldown && input.HorizontalInput != 0) PlayerDash();
+            if (input.DashInput && currentDashCooldown >= dashCooldown) PlayerDash();
+
+            if (status.IsNearWall && status.CanMove)
+            {
+                if (!status.IsWallSliding && status.IsLookingRight ? input.HorizontalInput > 0 : input.HorizontalInput < 0) EnterWallSlide();
+                if (status.IsWallSliding) WallSlide();
+            }
+            else ExitWallSilde();
         }
 
-        private void PlayerMove()
+        #region ----- Wall Interactions -----
+
+        private void EnterWallSlide()
         {
-            newVelocityVector.x = input.HorizontalInput * movementSpeed;
-            newVelocityVector.y = playerRB.velocity.y;
-            playerRB.velocity = newVelocityVector;
+            status.IsWallSliding = true;
         }
-
-        private void PreventPlayerFromSliding()
+        private void WallSlide()
         {
-            playerRB.velocity = new Vector2(0, 0);
+            playerRB.velocity = new Vector2(playerRB.velocity.x, 0);
         }
 
-        #region ----- Jumping ----- 
+        private void ExitWallSilde()
+        {
+            status.IsWallSliding = false;
+        }
+
+        private void WallJump()
+        {
+            status.IsWallSliding = false;
+            StartCoroutine("DoBlockMovementAfterWallJump");
+            playerRB.velocity = new Vector2(status.IsLookingRight ? -4 : 4, 7);
+        }
+
+        private IEnumerator DoBlockMovementAfterWallJump()
+        {
+            status.CanMove = false;
+            yield return new WaitForSecondsRealtime(.3f);
+            status.CanMove = true;
+        }
+
+
+        #endregion ----- Wall Interactions -----
+
+        #region ----- Jumping -----
+
         private void PlayerNormalJump()
         {
             newJumpingVector.x = playerRB.velocity.x;
             newJumpingVector.y = JumpPower;
             playerRB.velocity = newJumpingVector;
         }
+
         private void PlayerDoubleJump()
         {
             newJumpingVector.x = playerRB.velocity.x;
@@ -100,23 +135,45 @@ namespace Absentia.Player
                 playerRB.velocity += Vector2.up * lowJumpMultiplier * Time.deltaTime;
             }
         }
-        #endregion
+
+        #endregion ----- Jumping -----
 
         #region ----- Dashing -----
+
         private void PlayerDash()
         {
             currentDashCooldown = 0f;
             status.IsDashing = true;
             playerRB.constraints = RigidbodyConstraints2D.FreezePositionY | RigidbodyConstraints2D.FreezeRotation;
-            playerRB.velocity = new Vector2(dashPower * Mathf.Sign(input.HorizontalInput), 0);
+            var dashDirection = status.IsWallSliding ? (status.IsLookingRight ? -1 : 1) : (status.IsLookingRight ? 1 : -1);
+            playerRB.velocity = new Vector2(dashPower * dashDirection, 0);
             Invoke("PlayerDashEnded", .3f);
         }
+
         private void PlayerDashEnded()
         {
             playerRB.constraints = RigidbodyConstraints2D.FreezeRotation;
             status.IsDashing = false;
             playerRB.velocity = new Vector2(0, 0);
         }
-        #endregion
+
+        #endregion ----- Dashing -----
+
+        private void PlayerMove()
+        {
+            newVelocityVector.x = input.HorizontalInput * movementSpeed;
+            newVelocityVector.y = playerRB.velocity.y;
+            playerRB.velocity = newVelocityVector;
+        }
+
+        private void PreventPlayerFromSliding()
+        {
+            playerRB.velocity = new Vector2(0, 0);
+        }
+
+        private void HandleTimers()
+        {
+            currentDashCooldown += Time.deltaTime;
+        }
     }
 }
