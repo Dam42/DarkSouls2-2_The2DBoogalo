@@ -49,7 +49,8 @@ namespace Absentia.Player
         private bool WallCheck()
         {
             float extraWidthTest = .2f;
-            RaycastHit2D raycastHit = Physics2D.BoxCast(boxCollider.bounds.center, boxCollider.bounds.size, 0f, 
+            Vector3 size = new Vector3(0, .88f, 0);
+            RaycastHit2D raycastHit = Physics2D.BoxCast(boxCollider.bounds.center, boxCollider.bounds.size - size, 0f, 
                 IsLookingRight ? Vector2.right : Vector2.left, extraWidthTest, groundLayer);
             return raycastHit.collider != null;
         }

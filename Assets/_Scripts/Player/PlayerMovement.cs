@@ -7,12 +7,10 @@ namespace Absentia.Player
     {
         [Header("Movement Setting")]
         [SerializeField] private int movementSpeed;
-
         private Vector2 newVelocityVector = new Vector2(0, 0);
 
         [Header("Jump Setting")]
         [SerializeField] private float JumpPower;
-
         private Vector2 newJumpingVector = new Vector2(0, 0);
         private bool hasDoubleJump;
         private float fallingMultiplier;
@@ -20,13 +18,11 @@ namespace Absentia.Player
 
         [Header("Dash Setting")]
         [SerializeField] private float dashPower;
-
         [SerializeField] private float dashCooldown;
         private float currentDashCooldown;
 
         // Components
         private Rigidbody2D playerRB;
-
         private PlayerStatus status;
         private PlayerInput input;
 
@@ -73,7 +69,7 @@ namespace Absentia.Player
             }
             else ExitWallSilde();
         }
-
+        
         #region ----- Wall Interactions -----
 
         private void EnterWallSlide()
@@ -100,7 +96,7 @@ namespace Absentia.Player
         private IEnumerator DoBlockMovementAfterWallJump()
         {
             status.CanMove = false;
-            yield return new WaitForSecondsRealtime(.3f);
+            yield return new WaitForSecondsRealtime(.2f);
             status.CanMove = true;
         }
 
