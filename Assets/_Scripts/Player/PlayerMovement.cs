@@ -57,7 +57,7 @@ namespace Absentia.Player
             if (input.JumpInput && !status.IsDashing)
             {
                 if (status.IsGrounded) PlayerNormalJump();
-                else if (!status.IsGrounded && !status.IsNearWall && hasDoubleJump) PlayerDoubleJump();
+                else if (!status.IsGrounded && !status.IsWallSliding && hasDoubleJump) PlayerDoubleJump();
                 else if (status.IsWallSliding) WallJump();
             }
             if (input.DashInput && currentDashCooldown >= dashCooldown) PlayerDash();
@@ -88,7 +88,6 @@ namespace Absentia.Player
 
         private void WallJump()
         {
-            status.IsWallSliding = false;
             StartCoroutine("DoBlockMovementAfterWallJump");
             playerRB.velocity = new Vector2(status.IsLookingRight ? -4 : 4, 7);
         }
@@ -141,7 +140,7 @@ namespace Absentia.Player
             currentDashCooldown = 0f;
             status.IsDashing = true;
             playerRB.constraints = RigidbodyConstraints2D.FreezePositionY | RigidbodyConstraints2D.FreezeRotation;
-            var dashDirection = status.IsWallSliding ? (status.IsLookingRight ? -1 : 1) : (status.IsLookingRight ? 1 : -1);
+            var dashDirection = status.IsMovementReversed ? (status.IsLookingRight ? -1 : 1) : (status.IsLookingRight ? 1 : -1);
             playerRB.velocity = new Vector2(dashPower * dashDirection, 0);
             Invoke("PlayerDashEnded", .3f);
         }
@@ -150,7 +149,7 @@ namespace Absentia.Player
         {
             playerRB.constraints = RigidbodyConstraints2D.FreezeRotation;
             status.IsDashing = false;
-            playerRB.velocity = new Vector2(0, 0);
+            if (!status.IsGrounded) playerRB.velocity = new Vector2(status.IsLookingRight ? 4 : -4, 0);
         }
 
         #endregion ----- Dashing -----
@@ -164,7 +163,7 @@ namespace Absentia.Player
 
         private void PreventPlayerFromSliding()
         {
-            playerRB.velocity = new Vector2(0, 0);
+            playerRB.velocity = Vector2.zero;
         }
 
         private void HandleTimers()

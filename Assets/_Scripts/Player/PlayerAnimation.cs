@@ -22,9 +22,9 @@ namespace Absentia.Player
         {
             if (input.HorizontalInput != 0 && !status.IsDashing && status.CanMove)
             {
-                sprite.flipX = status.IsWallSliding ? input.HorizontalInput > 0 : input.HorizontalInput < 0;
+                sprite.flipX = status.IsMovementReversed ? input.HorizontalInput > 0 : input.HorizontalInput < 0;
             }
-            status.IsLookingRight = status.IsWallSliding ? sprite.flipX : !sprite.flipX;
+            status.IsLookingRight = status.IsMovementReversed ? sprite.flipX : !sprite.flipX;
 
             var state = GetState();
 

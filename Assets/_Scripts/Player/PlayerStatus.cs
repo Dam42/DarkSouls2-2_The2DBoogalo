@@ -11,6 +11,7 @@ namespace Absentia.Player
         public bool IsDashing;
         public bool IsWallSliding;
         public bool IsLookingRight = true;
+        public bool IsMovementReversed;
         public bool CanMove;
 
         private Rigidbody2D player;
@@ -28,6 +29,7 @@ namespace Absentia.Player
             IsNearWall = WallCheck() && !IsGrounded;
             IsJumping = player.velocity.y > 0 && !IsWallSliding;
             IsFalling = player.velocity.y < 0 && !IsGrounded && !IsWallSliding;
+            IsMovementReversed = IsWallSliding;
         }
 
         [SerializeField] [HideInInspector] private LayerMask groundLayer;
