@@ -49,6 +49,8 @@ namespace Absentia.Player
         {
             if (status.IsGrounded) hasDoubleJump = true;
             if (status.IsGrounded && playerRB.velocity.x != 0 && input.HorizontalInput == 0 && !status.IsDashing) PreventPlayerFromSliding();
+            if (status.IsTouchingWallWithFeet && !status.IsTouchingWallWithMiddle && !status.IsTouchingWallWithHead) BumpPlayerUp();
+            else if (status.IsTouchingWallWithHead && !status.IsTouchingWallWithMiddle && !status.IsTouchingWallWithFeet) BumpPlayerDown();
         }
 
         private void HandleInput()
@@ -62,7 +64,7 @@ namespace Absentia.Player
             }
             if (input.DashInput && currentDashCooldown >= dashCooldown) PlayerDash();
 
-            if (status.IsNearWall && status.CanMove)
+            if (status.CanGrabWall && status.CanMove)
             {
                 if (!status.IsWallSliding && status.IsLookingRight ? input.HorizontalInput > 0 : input.HorizontalInput < 0) EnterWallSlide();
                 if (status.IsWallSliding) WallSlide();
@@ -97,6 +99,16 @@ namespace Absentia.Player
             status.CanMove = false;
             yield return new WaitForSecondsRealtime(.2f);
             status.CanMove = true;
+        }
+
+        private void BumpPlayerUp()
+        {
+            playerRB.AddForce(new Vector2 (status.IsLookingRight ? 2 : -2, 2), ForceMode2D.Impulse);
+        }
+
+        private void BumpPlayerDown()
+        {
+            playerRB.AddForce(new Vector2(status.IsLookingRight ? 2 : -2, -2), ForceMode2D.Impulse);
         }
 
 

@@ -39,7 +39,7 @@ namespace Absentia.Player
             if (status.IsJumping) return Jump_Gun;
             if (status.IsFalling) return Fall_Gun;
             if (status.IsDashing) return Dash_Gun;
-            if (status.IsNearWall)
+            if (status.CanGrabWall)
             {
                 if (status.IsWallSliding) return WallSlide_Gun;
             }    
