@@ -20,7 +20,9 @@ namespace Absentia.Player
         [HideInInspector] public bool IsTouchingWallWithHead;
         [HideInInspector] public bool IsTouchingWallWithMiddle;
         // Other
+        [SerializeField] [HideInInspector] private LayerMask groundLayer;
         private Rigidbody2D player;
+        private BoxCollider2D boxCollider;
 
         private void Awake()
         {
@@ -29,28 +31,25 @@ namespace Absentia.Player
             CanMove = true;
         }
 
-        private void Update()
+        private void FixedUpdate()
         {
             IsGrounded = GroundCheck();
             IsTouchingWallWithFeet = IsTouchingWallBottom();
             IsTouchingWallWithHead = IsTouchingWallTop();
             IsTouchingWallWithMiddle = IsTouchingWallMiddle();
             CanGrabWall = (IsTouchingWallWithFeet && IsTouchingWallWithMiddle && IsTouchingWallWithHead) && !IsGrounded;
-            IsJumping = player.velocity.y > 0 && !IsWallSliding;
+            IsJumping = player.velocity.y > 0 && !IsGrounded && !IsWallSliding;
             IsFalling = player.velocity.y < 0 && !IsGrounded && !IsWallSliding;
             IsMovementReversed = IsWallSliding;
         }
 
-        [SerializeField] [HideInInspector] private LayerMask groundLayer;
-        private BoxCollider2D boxCollider;
-
         #region Ground Check
+
+        float extraHeightTest = .2f;
 
         private bool GroundCheck()
         {
-            float extraHeightTest = .2f;
             RaycastHit2D raycastHit = Physics2D.BoxCast(boxCollider.bounds.center, boxCollider.bounds.size, 0f, Vector2.down, extraHeightTest, groundLayer);
-            //RaycastHit2D raycastHit = Physics2D.BoxCast(boxCollider.bounds.center, boxCollider.bounds.size - new Vector3(0.1f, 0, 0), 0f, Vector2.down, extraHeightTest, groundLayer);
             return raycastHit.collider != null;
         }
 

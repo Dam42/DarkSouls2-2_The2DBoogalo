@@ -11,6 +11,7 @@ namespace Absentia.Player
 
         [Header("Jump Setting")]
         [SerializeField] private float JumpPower;
+        [SerializeField] private Vector2 wallJumpPower;
         private Vector2 newJumpingVector = new Vector2(0, 0);
         private bool hasDoubleJump;
         private float fallingMultiplier;
@@ -20,6 +21,9 @@ namespace Absentia.Player
         [SerializeField] private float dashPower;
         [SerializeField] private float dashCooldown;
         private float currentDashCooldown;
+
+        [Header("Other Setting")]
+        [SerializeField] private float maxFallingSpeed;
 
         // Components
         private Rigidbody2D playerRB;
@@ -40,16 +44,16 @@ namespace Absentia.Player
 
         private void Update()
         {
-            HandleInput();
-            HandleLowJumpAndFasterFalling();
+            HandleInput();         
             HandleTimers();
         }
 
         private void FixedUpdate()
         {
+            HandleLowJumpAndFasterFalling();
             if (status.IsGrounded) hasDoubleJump = true;
             if (status.IsGrounded && playerRB.velocity.x != 0 && input.HorizontalInput == 0 && !status.IsDashing) PreventPlayerFromSliding();
-            if (status.IsTouchingWallWithFeet && !status.IsTouchingWallWithMiddle && !status.IsTouchingWallWithHead) BumpPlayerUp();
+            if (status.IsTouchingWallWithFeet && !status.IsTouchingWallWithMiddle && !status.IsTouchingWallWithHead && !input.IsStillHoldingJump) BumpPlayerUp();
             else if (status.IsTouchingWallWithHead && !status.IsTouchingWallWithMiddle && !status.IsTouchingWallWithFeet) BumpPlayerDown();
         }
 
@@ -80,7 +84,7 @@ namespace Absentia.Player
         }
         private void WallSlide()
         {
-            playerRB.velocity = new Vector2(playerRB.velocity.x, 0);
+            playerRB.velocity = new Vector2(playerRB.velocity.x, -1f);
         }
 
         private void ExitWallSilde()
@@ -91,7 +95,7 @@ namespace Absentia.Player
         private void WallJump()
         {
             StartCoroutine("DoBlockMovementAfterWallJump");
-            playerRB.velocity = new Vector2(status.IsLookingRight ? -4 : 4, 7);
+            playerRB.velocity = new Vector2(wallJumpPower.x * (status.IsLookingRight ? -1 : 1), wallJumpPower.y);
         }
 
         private IEnumerator DoBlockMovementAfterWallJump()
@@ -108,7 +112,7 @@ namespace Absentia.Player
 
         private void BumpPlayerDown()
         {
-            playerRB.AddForce(new Vector2(status.IsLookingRight ? 2 : -2, -2), ForceMode2D.Impulse);
+            playerRB.AddForce(new Vector2(status.IsLookingRight ? .5f : -.5f, -.5f), ForceMode2D.Impulse);
         }
 
 
@@ -141,6 +145,7 @@ namespace Absentia.Player
             {
                 playerRB.velocity += Vector2.up * lowJumpMultiplier * Time.deltaTime;
             }
+            if (playerRB.velocity.y < -maxFallingSpeed) playerRB.velocity = new Vector2(playerRB.velocity.x, -maxFallingSpeed);
         }
 
         #endregion ----- Jumping -----
@@ -175,7 +180,7 @@ namespace Absentia.Player
 
         private void PreventPlayerFromSliding()
         {
-            playerRB.velocity = Vector2.zero;
+            playerRB.velocity = new Vector2(0, playerRB.velocity.y);
         }
 
         private void HandleTimers()
