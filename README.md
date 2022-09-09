@@ -7,5 +7,5 @@ After that:
 - Combat system (both melee and ranged).
 - Sound.
 - A main menu and some boring UI stuff
-- A fully fledged out level with hard platforming, enemies, and even a miniboss (maybe)
-- the fog is comming
+- A fully fledged out level with platforming challenges, enemies, and even a miniboss (maybe)
+- The fog is coming
