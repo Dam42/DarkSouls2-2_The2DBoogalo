@@ -13,7 +13,7 @@ TagManager:
   - Water
   - UI
   - Ground
-  - 
+  - Background Blur
   - 
   - 
   - 
@@ -42,8 +42,11 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
-  - name: Background
+  - name: Skybox
     uniqueID: 2528582157
+    locked: 0
+  - name: Background
+    uniqueID: 1818783959
     locked: 0
   - name: Layout
     uniqueID: 461306601
@@ -56,6 +59,9 @@ TagManager:
     locked: 0
   - name: Foreground middle
     uniqueID: 3607541759
+    locked: 0
+  - name: Water
+    uniqueID: 898829355
     locked: 0
   - name: Foreground front
     uniqueID: 4142465485
