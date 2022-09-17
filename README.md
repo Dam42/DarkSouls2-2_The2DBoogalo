@@ -1,7 +1,7 @@
 I'm currently working on a "simple" level for movement testing. 
 Turns out that making a somewhat nice looking scenery is quite hard, so there's a lot for me to learn and  improve, especially the background. 
 
-![image](https://user-images.githubusercontent.com/53350800/189440960-fc9ac462-e9b6-4d21-b967-354cea241787.png)
+![bruh](https://user-images.githubusercontent.com/53350800/190875368-77b477b3-d37e-4453-b13b-c4fc287a31b8.JPG)
 
 After that:
 - Health system and traps that actually do stuff.
@@ -11,4 +11,3 @@ After that:
 - A fully fledged out level with platforming challenges, enemies, and even a miniboss (maybe)
 - The fog is coming
 
-![image](https://user-images.githubusercontent.com/53350800/189491364-9355abb6-e16b-429a-8f78-c1e5e046662f.png)
