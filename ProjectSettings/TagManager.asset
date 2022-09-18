@@ -48,11 +48,11 @@ TagManager:
   - name: Background
     uniqueID: 1818783959
     locked: 0
-  - name: Layout
-    uniqueID: 461306601
-    locked: 0
   - name: Foreground back
     uniqueID: 759446597
+    locked: 0
+  - name: Middle Decortations
+    uniqueID: 1436922279
     locked: 0
   - name: Player
     uniqueID: 620185511
@@ -68,4 +68,7 @@ TagManager:
     locked: 0
   - name: Close Decorations
     uniqueID: 3199607337
+    locked: 0
+  - name: Layout
+    uniqueID: 461306601
     locked: 0

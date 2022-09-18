@@ -92,6 +92,9 @@ TextureImporter:
   - first:
       213: -157243134487158268
     second: Mossy - Decorations&Hazards_34
+  - first:
+      213: -488544862423118083
+    second: Mossy - Decorations&Hazards_13
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -763,85 +766,22 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Mossy - Decorations&Hazards_31
+      name: Mossy - Decorations&Hazards_13
       rect:
         serializedVersion: 2
-        x: 1598
-        y: 78
-        width: 142
-        height: 286
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 0d3d4d6c009844460800000000000000
-      internalID: 7225050338637960144
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Mossy - Decorations&Hazards_32
-      rect:
-        serializedVersion: 2
-        x: 1662
-        y: 78
-        width: 226
-        height: 400
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 4beae637c0e2ae4d0800000000000000
-      internalID: -3104618362107416908
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Mossy - Decorations&Hazards_33
-      rect:
-        serializedVersion: 2
-        x: 1812
-        y: 78
-        width: 132
-        height: 258
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 78326c6766b31bea0800000000000000
-      internalID: -5858836328966904953
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Mossy - Decorations&Hazards_34
-      rect:
-        serializedVersion: 2
-        x: 1878
+        x: 1586
         y: 80
-        width: 88
-        height: 202
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
+        width: 384
+        height: 400
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 4022689c33c51ddf0800000000000000
-      internalID: -157243134487158268
+      spriteID: dfe8d6a39075839f0800000000000000
+      internalID: -488544862423118083
       vertices: []
       indices: 
       edges: []
