@@ -9,7 +9,8 @@ namespace Absentia.Camera
         [SerializeField] private PlayerStatus status;
         [SerializeField] private Rigidbody2D player;
         private CinemachineFramingTransposer transposer;
-        private float screenYup = .55f;
+        private Vector3 trackedObjectOffset = new Vector3(0, 1, 0);
+        private float screenYup = .6f;
         private float screenYdown = .15f;
 
         private void Awake()
@@ -19,7 +20,8 @@ namespace Absentia.Camera
 
         private void FixedUpdate()
         {
-            transposer.m_TrackedObjectOffset = new Vector3(status.IsLookingRight ? .5f : -.5f, 1, 0);
+            trackedObjectOffset.x = status.IsLookingRight ? .5f : -.5f;
+            transposer.m_TrackedObjectOffset = trackedObjectOffset;
 
             if (player.velocity.y < -10f && transposer.m_ScreenY != screenYdown)
             {
