@@ -6,7 +6,7 @@ namespace Absentia.Player
     public class PlayerMovement : MonoBehaviour
     {
         [Header("Movement Setting")]
-        [SerializeField] private int movementSpeed;
+        [SerializeField] private float movementSpeed;
         private Vector2 newVelocityVector = new Vector2(0, 0);
 
         [Header("Jump Setting")]
@@ -63,7 +63,7 @@ namespace Absentia.Player
             if (status.IsGrounded && input.HasJumpBuffered) PlayerNormalJump();
             else if (input.JumpInput && !status.IsDashing)
             {
-                if (status.IsGrounded) PlayerNormalJump();
+                if (status.IsGrounded || status.hasCoyoteTime) PlayerNormalJump();
                 else if (!status.IsGrounded && !status.IsWallSliding && hasDoubleJump) PlayerDoubleJump();
                 else if (status.IsWallSliding) WallJump();
             }

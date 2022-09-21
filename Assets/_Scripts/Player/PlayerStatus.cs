@@ -5,7 +5,21 @@ namespace Absentia.Player
     public class PlayerStatus : MonoBehaviour
     {
         // Statuses
-        public bool IsGrounded;
+        private bool isGrounded;
+        public bool IsGrounded
+        {
+            get { return isGrounded; }
+            set 
+                {
+                if (value != isGrounded)
+                {
+                    coyoteTimer = 0;
+                    isGrounded = value;
+                }
+                else return;
+                }
+        }
+        public bool hasCoyoteTime;
         public bool CanGrabWall;
         public bool IsJumping;
         public bool IsFalling;
@@ -23,12 +37,19 @@ namespace Absentia.Player
         [SerializeField] [HideInInspector] private LayerMask groundLayer;
         private Rigidbody2D player;
         private BoxCollider2D boxCollider;
+        private float coyoteTimer;
 
         private void Awake()
         {
             boxCollider = GetComponent<BoxCollider2D>();
             player = GetComponent<Rigidbody2D>();
             CanMove = true;
+        }
+
+        private void Update()
+        {
+            hasCoyoteTime = coyoteTimer < .2f;
+            coyoteTimer += Time.deltaTime;
         }
 
         private void FixedUpdate()
